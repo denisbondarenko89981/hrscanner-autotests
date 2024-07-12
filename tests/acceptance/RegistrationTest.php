@@ -3,8 +3,7 @@ require_once 'vendor/autoload.php';
 
 // Подключение конфигурационного файла
 
-// $config = require __DIR__ . '/../config/config.php';
-$config = require 'C:\\Users\\denis\\Documents\\my_php_project\\config\\config.php';
+$config = require __DIR__ . '/../config/config.php';
 
 use Facebook\WebDriver\Chrome\ChromeOptions;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
@@ -21,8 +20,7 @@ class RegistrationTest extends \Codeception\Test\Unit {
 
     protected function setUp(): void {
         // Загрузка конфигурации
-        // $this->config = require __DIR__ . '/../config/config.php';
-        $this->config = require 'C:\\Users\\denis\\Documents\\my_php_project\\config\\config.php';
+        $this->config = require __DIR__ . '/../config/config.php';
 
         // Путь к ChromeDriver из конфигурационного файла
         $chromeDriverPath = $this->config['chromeDriverPath'];
