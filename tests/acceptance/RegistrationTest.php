@@ -1,10 +1,6 @@
 <?php
 require_once 'vendor/autoload.php';
 
-// Подключение конфигурационного файла
-
-$config = require __DIR__ . '/../config/config.php';
-
 use Facebook\WebDriver\Chrome\ChromeOptions;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
@@ -33,7 +29,8 @@ class RegistrationTest extends \Codeception\Test\Unit {
         $capabilities = DesiredCapabilities::chrome();
         $capabilities->setCapability(ChromeOptions::CAPABILITY, $options);
 
-        $this->driver = RemoteWebDriver::create('http://localhost:9515', $capabilities);
+        // Использование URL ChromeDriver из конфигурационного файла
+        $this->driver = RemoteWebDriver::create($this->config['chromeDriverUrl'], $capabilities);
     }
 
     public function testWebPage() {
@@ -49,7 +46,7 @@ class RegistrationTest extends \Codeception\Test\Unit {
             $button->click();
         } catch (NoSuchElementException $exception) {
             // Если элемент не найден, тест будет зафейлен с сообщением об ошибке
-            $txt = "{$this->config['emoji_failure']}Тест проверки регистрации НЕ прошёл. Не найдена кнопка «Протестировать HRSCANNER».";
+            $txt = "{$this->config['emojiFailure']} Тест проверки регистрации НЕ прошёл. Не найдена кнопка «Протестировать HRSCANNER».";
             $this->sendMessage($txt);
         }
 
@@ -62,7 +59,7 @@ class RegistrationTest extends \Codeception\Test\Unit {
             $emailInput->sendKeys($date->getTimestamp() . '@hrscanner.ru');
         } catch (NoSuchElementException $exception) {
             // Если поле ввода не найдено, тест будет зафейлен с сообщением об ошибке
-            $txt = "{$this->config['emoji_failure']}Тест проверки регистрации НЕ прошёл. Не найдено поле ввода email.";
+            $txt = "{$this->config['emojiFailure']} Тест проверки регистрации НЕ прошёл. Не найдено поле ввода email.";
             $this->sendMessage($txt);
         }
 
@@ -78,7 +75,7 @@ class RegistrationTest extends \Codeception\Test\Unit {
             $phoneInput->sendKeys("4" . $date->getTimestamp());
         } catch (NoSuchElementException $exception) {
             // Если поле ввода не найдено, тест будет зафейлен с сообщением об ошибке
-            $txt = "{$this->config['emoji_failure']}Тест проверки регистрации НЕ прошёл. Не найдено поле ввода телефона.";
+            $txt = "{$this->config['emojiFailure']} Тест проверки регистрации НЕ прошёл. Не найдено поле ввода телефона.";
             $this->sendMessage($txt);
         }
 
@@ -91,7 +88,7 @@ class RegistrationTest extends \Codeception\Test\Unit {
             $button->click();
         } catch (NoSuchElementException $exception) {
             // Если кнопка не найдена, тест будет зафейлен с сообщением об ошибке
-            $txt = "{$this->config['emoji_failure']}Тест проверки регистрации НЕ прошёл. Не найдена кнопка регистрации.";
+            $txt = "{$this->config['emojiFailure']} Тест проверки регистрации НЕ прошёл. Не найдена кнопка регистрации.";
             $this->sendMessage($txt);
         }
 
@@ -104,11 +101,11 @@ class RegistrationTest extends \Codeception\Test\Unit {
         // Условие для проверки URL
         if ($currentUrl === 'https://hrscanner.ru/ru/user/home') {
             // Если URL совпадает, выводим сообщение об успешной проверке
-            $txt = "{$this->config['emoji_success']}Тест проверки регистрации прошёл успешно";
+            $txt = "{$this->config['emojiSuccess']} Тест проверки регистрации прошёл успешно";
             $this->sendMessage($txt);
         } else {
             // Если URL не совпадает, фейлим тест и выводим сообщение об ошибке
-            $txt = "{$this->config['emoji_failure']}Тест проверки регистрации НЕ прошёл. Получен URL $currentUrl \n вместо ожидаемого.";
+            $txt = "{$this->config['emojiFailure']} Тест проверки регистрации НЕ прошёл. Получен URL $currentUrl \n вместо ожидаемого.";
             $this->sendMessage($txt);
             $this->fail("Проверка URL не пройдена.");
         }
